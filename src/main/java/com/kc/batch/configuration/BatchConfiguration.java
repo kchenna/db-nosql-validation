@@ -147,19 +147,17 @@ public class BatchConfiguration  {
     	repo.save(v);
     	
     	
-    	
-    	System.out.println("repo.count()"+hrepo.countAll());
-    	
-    	
     	ObjectMapper mapper = new ObjectMapper();
     	String s;
 		try {
-			s = mapper.writeValueAsString(v);
+			s = mapper.writeValueAsString(hrepo.findById("hotel_10025").get());
+			String test = "{\"address\":\"Capstone Road, ME7 3JE\",\"alias\":null,\"checkin\":null,\"checkout\":null,\"city\":\"Medway\",\"country\":\"United Kingdom\",\"description\":\"40 bed summer hostel about 3 miles from Gillingham, housed in a districtive converted Oast House in a semi-rural setting.\",\"directions\":null,\"email\":null,\"fax\":null,\"free_breakfast\":true,\"free_internet\":false,\"free_parking\":true,\"id\":\"hotel_10025\",\"name\":\"Medway Youth Hostel\",\"pets_ok\":true,\"phone\":\"+44 870 770 5964\",\"public_likes\":[\"Julius Tromp I\",\"Corrine Hilll\",\"Jaeden McKenzie\",\"Vallie Ryan\",\"Brian Kilback\",\"Lilian McLaughlin\",\"Ms. Moses Feeney\",\"Elnora Trantow\"],\"state\":null,\"title\":\"Gillingham (Kent)\",\"tollfree\":null,\"type\":\"hotel\",\"url\":\"http://www.yha.org.uk\",\"vacancy\":true}";
+			
 			//TODO 
 	    	// Couch JSON Object
 		    	try {
-					mapper.readTree(s);
-				} catch (IOException e) {
+		    		System.out.println("validation "+mapper.readTree(s).equals(mapper.readTree(test)));
+		    		} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

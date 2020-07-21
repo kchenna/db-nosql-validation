@@ -32,7 +32,7 @@ public class Hotel {
 	@Id
 	@Field (value="ID")
 	@GeneratedValue (strategy = GenerationStrategy.UNIQUE)
-	private int id;
+	private String id;
 	
 	 private String name;
 	private boolean pets_ok;
@@ -123,10 +123,10 @@ public class Hotel {
 	public void setFree_parking(boolean free_parking) {
 		this.free_parking = free_parking;
 	}
-	public int getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getName() {
