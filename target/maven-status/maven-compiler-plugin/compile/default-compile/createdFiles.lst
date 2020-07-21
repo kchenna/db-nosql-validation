@@ -1,0 +1,17 @@
+com/techshard/batch/configuration/VoltageProcessor.class
+com/techshard/batch/dao/repository/IHotelRepository.class
+com/techshard/batch/dao/repository/IVoltageRepository.class
+com/techshard/batch/configuration/VoltageRowMapper.class
+com/techshard/batch/dao/entity/Hotel.class
+com/techshard/batch/configuration/BatchConfiguration.class
+com/techshard/batch/Test.class
+com/techshard/batch/TracePerformanceAspect.class
+com/techshard/batch/dao/entity/Inventory.class
+com/techshard/batch/dao/entity/Item.class
+com/techshard/batch/dao/entity/Review.class
+com/techshard/batch/configuration/NotificationListener.class
+com/techshard/batch/dao/entity/Geo.class
+com/techshard/batch/dao/entity/Part.class
+com/techshard/batch/dao/entity/Voltage.class
+com/techshard/batch/Application.class
+com/techshard/batch/configuration/VoltageFieldSetMapper.class
