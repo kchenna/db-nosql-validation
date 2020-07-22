@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import com.kc.batch.dao.entity.Voltage;
-
 @Component
 public class NotificationListener extends JobExecutionListenerSupport{
 
@@ -28,11 +26,11 @@ public class NotificationListener extends JobExecutionListenerSupport{
         if(jobExecution.getStatus() == BatchStatus.COMPLETED) {
             LOGGER.info("!!! JOB FINISHED! Time to verify the results");
 
-            jdbcTemplate.query("SELECT volt, time FROM voltage",
+            /*jdbcTemplate.query("SELECT volt, time FROM voltage",
                     (rs, row) -> new Voltage(
                             rs.getBigDecimal(1),
                             rs.getDouble(2))
-            ).forEach(voltage -> LOGGER.info("Found <" + voltage + "> in the database."));
+            ).forEach(voltage -> LOGGER.info("Found <" + voltage + "> in the database."));*/
         }
     }
 }

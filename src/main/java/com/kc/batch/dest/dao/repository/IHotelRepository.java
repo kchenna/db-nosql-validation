@@ -1,4 +1,4 @@
-package com.kc.batch.dao.repository;
+package com.kc.batch.dest.dao.repository;
 
 import org.springframework.data.couchbase.core.query.Query;
 import org.springframework.data.couchbase.repository.CouchbaseRepository;

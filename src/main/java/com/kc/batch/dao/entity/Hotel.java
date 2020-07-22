@@ -2,7 +2,6 @@ package com.kc.batch.dao.entity;
 
 import java.util.List;
 
-
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.GenerationStrategy;
@@ -11,7 +10,6 @@ import com.couchbase.client.java.repository.annotation.Field;
 import com.couchbase.client.java.repository.annotation.Id;
 
 @Document
-
 public class Hotel {
 
 	private String address;
@@ -25,9 +23,23 @@ public class Hotel {
 	private String email;
 	private String fax;
 	private boolean free_breakfast;
+	
+	
+	public Geo getGeo() {
+		return geo;
+	}
+	public void setGeo(Geo geo) {
+		this.geo = geo;
+	}
+	public List<Review> getReviews() {
+		return reviews;
+	}
+	public void setReviews(List<Review> reviews) {
+		this.reviews = reviews;
+	}
 	private boolean free_internet;
 	private boolean free_parking;
-	//private Geo geo;
+	private Geo geo;
 	
 	@Id
 	@Field (value="ID")
@@ -38,7 +50,7 @@ public class Hotel {
 	private boolean pets_ok;
 	private String phone;
 	private List<String> public_likes;
-	//public List<Review> reviews;
+	public List<Review> reviews;
 	private String state;
 	private String title;
 	private String tollfree;
