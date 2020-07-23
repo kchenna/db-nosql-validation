@@ -10,6 +10,8 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.item.database.JdbcCursorItemReader;
+import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
 import org.springframework.batch.item.json.JacksonJsonObjectReader;
@@ -20,8 +22,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.kc.batch.dao.entity.Hotel;
+import com.kc.batch.source.dao.repository.HotelImpl;
 
 
 @Configuration
@@ -35,16 +39,23 @@ public class BatchConfiguration  {
     public StepBuilderFactory stepBuilderFactory;
     
 
-    /*@Bean 
-    public JdbcCursorItemReader<Voltage> read(final DataSource dataSource){
+    @Bean(name = "jdbcTemplate1")
+    public JdbcTemplate jdbcTemplate1(DataSource ds) {
+     return new JdbcTemplate(ds);
+    }
+
+    @Bean 
+    public JdbcCursorItemReader<Hotel> read(DataSource dataSource){
     	
-    	return new JdbcCursorItemReaderBuilder<Voltage>()
+    	return new JdbcCursorItemReaderBuilder<Hotel>()
     			.dataSource(dataSource)
-    			.name("voltItemReader")
-    			.sql("select volt,time from voltage")
+    			.name("hotelItemReader")
+    			.sql("select * from hotel")
     			.rowMapper(new SourceRowMapper())
     			.build();
-    }*/
+    	
+    	
+    }
     
     Resource sourceResource = new FileSystemResource("/Users/amala/Documents/Kamal/batch-processing-large-datasets-spring/src/main/resources/source.json");
 
@@ -95,11 +106,12 @@ public class BatchConfiguration  {
         try {
 			return stepBuilderFactory.get("step1")
 			        .<Hotel, Hotel> chunk(10)
-			        .reader(jsonItemReader())
+			        //.reader(jsonItemReader())
+			        .reader(read(dataSource))
 			        .processor(processor())
 			        .writer(writer)
 			        .build();
-		} catch (MalformedURLException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
