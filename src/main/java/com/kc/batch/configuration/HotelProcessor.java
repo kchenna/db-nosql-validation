@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kc.batch.dao.entity.Hotel;
+import com.kc.batch.dao.entity.Validator;
 import com.kc.batch.dest.dao.repository.IHotelRepository;
 
 public class HotelProcessor implements PageProcessor<Hotel> {
@@ -14,6 +15,9 @@ public class HotelProcessor implements PageProcessor<Hotel> {
 	@Autowired
 	public IHotelRepository couchbaseRepo;
 	
+	@Autowired
+	private Validator validator;
+
 	@Override
 	public void process(List<Hotel> source) {
 		
@@ -27,12 +31,11 @@ public class HotelProcessor implements PageProcessor<Hotel> {
 		List<Hotel> dest = new ArrayList<Hotel>();
 	    iterable.forEach(dest::add);
 
-	    source.removeAll(dest);
-
-	    if(source.isEmpty()) {
-	    	//source.add("N/A");
-	    }
+	    List<Hotel> hotels = new ArrayList<Hotel>(source);
+	    hotels.removeAll(dest);
 	    
+	    
+	    validator.addAll(hotels);
 	}
 	
 

@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import javax.sql.DataSource;
 
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -29,6 +30,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.kc.batch.dao.entity.Hotel;
+import com.kc.batch.dao.entity.Validator;
 import com.kc.batch.dest.dao.repository.IHotelRepository;
 import com.kc.batch.source.dao.repository.HotelImpl;
 
@@ -68,6 +70,12 @@ public class BatchConfiguration  {
     }
     
     private static final int rows=100;
+    
+    
+    @Bean
+	public Validator validator() {
+		return new Validator();
+	}
     
     @Bean
 	public HotelProcessor hotelProcessor() {
@@ -142,6 +150,17 @@ public class BatchConfiguration  {
                 .build();
     }
     
+    
+    @Bean
+	public Aggregator writer() {
+		return new Aggregator();
+	}
+    
+    @Bean
+	public JobExecutionListener listener() {
+		return new JobCompletionNotificationListener();
+	}
+    
     @Bean
 	public TaskExecutor taskExecutor(){
 	    SimpleAsyncTaskExecutor asyncTaskExecutor=new SimpleAsyncTaskExecutor("spring_batch");
@@ -159,7 +178,7 @@ public class BatchConfiguration  {
 	}*/
     
     @Bean
-    public Step step1(FlatFileItemWriter<Hotel> writer,DataSource dataSource) {
+    public Step step1(DataSource dataSource) {
     	
     	
     	/*for(int i=500000;i<500500;i++) {
@@ -184,7 +203,7 @@ public class BatchConfiguration  {
 			        //.reader(jsonItemReader())
 			        //.reader(read(dataSource))
 			        //.processor(processor())
-			        .writer(writer)
+			        .writer(writer())
 			        .taskExecutor(taskExecutor())
 			        .build();
 		} catch (Exception e) {
