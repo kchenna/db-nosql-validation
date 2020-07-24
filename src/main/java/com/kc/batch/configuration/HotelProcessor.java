@@ -32,11 +32,18 @@ public class HotelProcessor implements PageProcessor<Hotel> {
 	    System.out.println("dest" + dest );
 	    List<Long> destForPrint = source.stream()
                 .map(Hotel::getHotelId)
+                .sorted()
                 .collect(Collectors.toList());
 	    
 	    
 	    System.out.println("Thread dest.."+Thread.currentThread().getId()+" ..id "+destForPrint);
-		
+	    
+	    source.removeAll(dest);
+	    
+	    System.out.println("Thread not equal one .."+Thread.currentThread().getId()+" ..id "+source);
+	    
+	    
+	    
 	}
 	
 

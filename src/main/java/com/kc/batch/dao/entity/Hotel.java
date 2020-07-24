@@ -223,5 +223,12 @@ public class Hotel {
 	}
 		
 	
+	@Override
+	public boolean equals(Object o) {
+	    if (!(o instanceof Hotel))
+	        return false;
+	    Hotel n = (Hotel) o;
+	    return n.name.equals(name) && n.hotelId == hotelId ;
+	}
 	
 }

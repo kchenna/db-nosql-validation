@@ -10,12 +10,14 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.PagingQueryProvider;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
+import org.springframework.batch.item.file.transform.PassThroughLineAggregator;
 import org.springframework.batch.item.json.JacksonJsonObjectReader;
 import org.springframework.batch.item.json.JsonItemReader;
 import org.springframework.batch.item.json.builder.JsonItemReaderBuilder;
@@ -67,7 +69,7 @@ public class BatchConfiguration  {
     	
     }
     
-    private static final int rows=10;
+    private static final int rows=1000;
     
     @Bean
 	public HotelProcessor hotelProcessor() {
@@ -131,7 +133,7 @@ public class BatchConfiguration  {
     
     Resource outputResource = new FileSystemResource("/Users/amala/Documents/Kamal/batch-processing-large-datasets-spring/src/main/resources/mismatch.csv");
    
-    @Bean
+    /*@Bean
     public FlatFileItemWriter<Hotel> fWriter() {
         return new FlatFileItemWriterBuilder<Hotel>()
                 .name("MisMatchItemWriter")
@@ -140,7 +142,7 @@ public class BatchConfiguration  {
                 .delimiter(",")
                 .names(new String[]{"id"})
                 .build();
-    }
+    }*/
     
     @Bean
 	public TaskExecutor taskExecutor(){
@@ -149,8 +151,17 @@ public class BatchConfiguration  {
 	    return asyncTaskExecutor;
 	}
 
+    
     @Bean
-    public Step step1(FlatFileItemWriter<Hotel> writer,DataSource dataSource) {
+	ItemWriter<Hotel> writer() {
+		return new FlatFileItemWriterBuilder<Hotel>().
+				name("OrderWriter").
+				lineAggregator(new PassThroughLineAggregator<>()).
+				resource(outputResource).build();
+	}
+    
+    @Bean
+    public Step step1(ItemWriter<Hotel> writer,DataSource dataSource) {
     	
     	
     	/*for(int i=500000;i<500500;i++) {
