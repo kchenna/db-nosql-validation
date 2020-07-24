@@ -15,7 +15,8 @@ public class SourceRowMapper implements RowMapper<Hotel> {
 	public Hotel mapRow(ResultSet rs, int rowNum) throws SQLException {
    		Hotel h = new Hotel();
    		h.setAddress(rs.getString("address"));
-   		h.setId(rs.getString("id"));
+   		h.setHotelId(rs.getLong("hotel_id"));
+   		h.setId(rs.getLong("id"));
 		return h;
 	}
 }

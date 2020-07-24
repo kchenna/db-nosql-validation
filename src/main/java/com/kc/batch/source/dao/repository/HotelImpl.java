@@ -26,12 +26,13 @@ public class HotelImpl {
 	public void testCreate(Hotel hotel) {
 		
 		String sql ="INSERT INTO hotel(\n" + 
-				"	address, alias, checkin, checkout, city, country, description, directions, email, fax, free_breakfast, free_internet,"
+				"	hotel_id,address, alias, checkin, checkout, city, country, description, directions, email, fax, free_breakfast, free_internet,"
 				+ " free_parking, geo_id, id, name, pets_ok, phone, price, public_likes, review_id, state, title,"
 				+ " tollfree, type, url, vacancy)\n" + 
-				"	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				"	VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		
 		jdbcTemplate1.update(sql, new Object[] { 
+				hotel.getHotelId(),
 				hotel.getAddress(),
 				hotel.getAlias(),
 				hotel.getCheckin(),

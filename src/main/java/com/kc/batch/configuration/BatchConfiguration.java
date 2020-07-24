@@ -11,7 +11,9 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
+import org.springframework.batch.item.database.PagingQueryProvider;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
+import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
 import org.springframework.batch.item.json.JacksonJsonObjectReader;
@@ -22,9 +24,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.kc.batch.dao.entity.Hotel;
+import com.kc.batch.dest.dao.repository.IHotelRepository;
 import com.kc.batch.source.dao.repository.HotelImpl;
 
 
@@ -38,12 +43,17 @@ public class BatchConfiguration  {
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
     
+    @Autowired
+    public IHotelRepository repo;
 
     @Bean(name = "jdbcTemplate1")
     public JdbcTemplate jdbcTemplate1(DataSource ds) {
      return new JdbcTemplate(ds);
     }
 
+    @Autowired
+    public HotelImpl impl;
+    
     @Bean 
     public JdbcCursorItemReader<Hotel> read(DataSource dataSource){
     	
@@ -56,6 +66,40 @@ public class BatchConfiguration  {
     	
     	
     }
+    
+    private static final int rows=10;
+    
+    @Bean
+	public HotelProcessor hotelProcessor() {
+		return new HotelProcessor();
+	}
+    
+    @Bean
+	public CompositeJdbcPagingItemReader<Hotel> pagingReader(DataSource dataSource) {
+		CompositeJdbcPagingItemReader<Hotel> reader = new CompositeJdbcPagingItemReader<>();
+		reader.setDataSource(dataSource);
+		reader.setFetchSize(rows);
+		reader.setPageSize(rows);
+		reader.setQueryProvider(queryProvider(dataSource));
+		reader.setRowMapper(new SourceRowMapper());
+		reader.setPageProcessor(hotelProcessor());
+		return reader;
+	}
+    
+    
+    private PagingQueryProvider queryProvider(DataSource dataSource) {
+		SqlPagingQueryProviderFactoryBean bean = new SqlPagingQueryProviderFactoryBean();
+		bean.setDataSource(dataSource);
+		bean.setSelectClause("select id,hotel_id,address");
+		bean.setFromClause("from hotel");
+		bean.setSortKey("hotel_id");
+		try {
+			return bean.getObject();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+    
     
     Resource sourceResource = new FileSystemResource("/Users/amala/Documents/Kamal/batch-processing-large-datasets-spring/src/main/resources/source.json");
 
@@ -94,22 +138,45 @@ public class BatchConfiguration  {
                 .resource(outputResource)
                 .delimited()
                 .delimiter(",")
-                .names(new String[]{"id", "name"})
+                .names(new String[]{"id"})
                 .build();
     }
     
-    
+    @Bean
+	public TaskExecutor taskExecutor(){
+	    SimpleAsyncTaskExecutor asyncTaskExecutor=new SimpleAsyncTaskExecutor("spring_batch");
+	    asyncTaskExecutor.setConcurrencyLimit(5);
+	    return asyncTaskExecutor;
+	}
 
     @Bean
     public Step step1(FlatFileItemWriter<Hotel> writer,DataSource dataSource) {
     	
-        try {
+    	
+    	/*for(int i=500000;i<500500;i++) {
+    		Hotel hot = new Hotel();
+    		hot.setHotel_id(i);
+    		hot.setId(i);
+    		hot.setAddress("My Home Address");
+    		hot.setFree_breakfast(i%2==0);
+    		hot.setName("Random "+i);
+    		hot.setType("hotel");
+    		impl.testCreate(hot);
+    		repo.save(hot);
+    	}
+    	
+    	System.out.println("Done ..");*/
+    	
+    	
+    	try {
 			return stepBuilderFactory.get("step1")
-			        .<Hotel, Hotel> chunk(10)
+			        .<Hotel, Hotel> chunk(rows)
+			        .reader(pagingReader(dataSource))
 			        //.reader(jsonItemReader())
-			        .reader(read(dataSource))
-			        .processor(processor())
+			        //.reader(read(dataSource))
+			        //.processor(processor())
 			        .writer(writer)
+			        .taskExecutor(taskExecutor())
 			        .build();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

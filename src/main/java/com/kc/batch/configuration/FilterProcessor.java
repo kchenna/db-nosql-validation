@@ -1,5 +1,7 @@
 package com.kc.batch.configuration;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.batch.item.ItemProcessor;
@@ -22,7 +24,10 @@ public class FilterProcessor implements ItemProcessor<Hotel, Hotel> {
 		try {
 			System.out.println("id " + hotel.getId());
 
-			Optional<Hotel> optional = couchbaseRepo.findById(hotel.getId());
+			//Optional<Hotel> optional = couchbaseRepo.findById(hotel.getId());
+			
+			/*Iterable<Hotel> hotels = couchbaseRepo.findAllById(Arrays.asList(new String[] {"a"}));
+			
 
 			if (optional.isPresent()) {
 				Hotel destHotel = optional.get();
@@ -38,7 +43,7 @@ public class FilterProcessor implements ItemProcessor<Hotel, Hotel> {
 					return null;
 				}
 
-			}
+			}*/
 
 		} catch (Exception e) {
 			e.printStackTrace();

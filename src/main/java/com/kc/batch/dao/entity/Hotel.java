@@ -44,9 +44,19 @@ public class Hotel {
 	@Id
 	@Field (value="ID")
 	@GeneratedValue (strategy = GenerationStrategy.UNIQUE)
-	private String id;
+	private long id;
 	
-	 private String name;
+	@Field(value = "hotel_id")
+	private long hotelId;
+	
+	
+	public long getHotelId() {
+		return hotelId;
+	}
+	public void setHotelId(long hotel_id) {
+		this.hotelId = hotel_id;
+	}
+	private String name;
 	private boolean pets_ok;
 	private String phone;
 	private List<String> public_likes;
@@ -135,10 +145,10 @@ public class Hotel {
 	public void setFree_parking(boolean free_parking) {
 		this.free_parking = free_parking;
 	}
-	public String getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -200,6 +210,16 @@ public class Hotel {
 	}
 	public void setVacancy(boolean vacancy) {
 		this.vacancy = vacancy;
+	}
+	@Override
+	public String toString() {
+		return "Hotel [address=" + address + ", alias=" + alias + ", checkin=" + checkin + ", checkout=" + checkout
+				+ ", city=" + city + ", country=" + country + ", description=" + description + ", directions="
+				+ directions + ", email=" + email + ", fax=" + fax + ", free_breakfast=" + free_breakfast
+				+ ", free_internet=" + free_internet + ", free_parking=" + free_parking + ", geo=" + geo + ", id=" + id
+				+ ", name=" + name + ", pets_ok=" + pets_ok + ", phone=" + phone + ", public_likes=" + public_likes
+				+ ", reviews=" + reviews + ", state=" + state + ", title=" + title + ", tollfree=" + tollfree
+				+ ", type=" + type + ", url=" + url + ", vacancy=" + vacancy + "]";
 	}
 		
 	
