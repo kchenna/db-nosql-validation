@@ -131,7 +131,7 @@ public class BatchConfiguration  {
     public Job mismatchJob(NotificationListener listener, Step step1) {
         return jobBuilderFactory.get("FoundMisMatchJob")
                 .incrementer(new RunIdIncrementer())
-                .listener(listener)
+                .listener(listener())
                 .flow(step1)
                 .end()
                 .build();
