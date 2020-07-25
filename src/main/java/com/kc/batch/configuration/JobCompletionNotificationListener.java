@@ -17,17 +17,17 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
 
 	@Autowired
 	private Validator validator;
+	Path path = Paths.get("/Users/amala/Documents/Kamal/mismatch.csv");
 	
 	@Override
 	public void afterJob(JobExecution jobExecution) {
 		if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
-			Path path = Paths.get("/Users/amala/Documents/Kamal/mismatch.csv");
-			System.out.println("path" + path.getFileName());
+			System.out.println("Batch completed !!!");
+			System.out.println("Check the mismatch file on this location "+path.getFileName());
 			
 			try (BufferedWriter fileWriter = Files.newBufferedWriter(path)) {
 				fileWriter.newLine();
 				for (Hotel pd : validator.getValidator()) {
-					System.out.println(" hotel " + pd.getHotelId());
 							fileWriter.write(new StringBuilder().append(pd.getHotelId()).toString());
 					fileWriter.newLine();
 				}

@@ -23,9 +23,9 @@ public class Aggregator implements ItemWriter<Hotel> {
 	@Override
 	public void write(List<? extends Hotel> source) throws Exception {
 		
-		System.out.println("source ... "+source);
+		System.out.println("source ... "+source.get(0).getHotelId());
 		
-		/*List<Long> collect = source.stream()
+		List<Long> collect = source.stream()
                 .map(Hotel::getHotelId)
                 .collect(Collectors.toList());
 		
@@ -38,7 +38,7 @@ public class Aggregator implements ItemWriter<Hotel> {
 	    List<Hotel> hotels = new ArrayList<Hotel>(source);
 	    hotels.removeAll(dest);
 		
-	    validator.addAll(hotels);*/
+	    validator.addAll(hotels);
 		
 		
 	}

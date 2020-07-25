@@ -228,7 +228,7 @@ public class Hotel {
 	    if (!(o instanceof Hotel))
 	        return false;
 	    Hotel n = (Hotel) o;
-	    return n.address.equals(address) && n.hotelId == hotelId ;
+	    return n.name.equals(name) && n.hotelId == hotelId ;
 	}
 	
 }

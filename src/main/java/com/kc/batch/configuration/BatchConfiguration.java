@@ -12,6 +12,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
+import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.PagingQueryProvider;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
@@ -83,14 +84,14 @@ public class BatchConfiguration  {
 	}
     
     @Bean
-	public CompositeJdbcPagingItemReader<Hotel> pagingReader(DataSource dataSource) {
-		CompositeJdbcPagingItemReader<Hotel> reader = new CompositeJdbcPagingItemReader<>();
+	public JdbcPagingItemReader<Hotel> pagingReader(DataSource dataSource) {
+    	JdbcPagingItemReader<Hotel> reader = new JdbcPagingItemReader<>();
 		reader.setDataSource(dataSource);
 		reader.setFetchSize(rows);
 		reader.setPageSize(rows);
 		reader.setQueryProvider(queryProvider(dataSource));
 		reader.setRowMapper(new SourceRowMapper());
-		reader.setPageProcessor(hotelProcessor());
+		//reader.setPageProcessor(hotelProcessor());
 		return reader;
 	}
     

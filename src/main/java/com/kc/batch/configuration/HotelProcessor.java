@@ -27,15 +27,15 @@ public class HotelProcessor implements PageProcessor<Hotel> {
 		
 		System.out.println("Thread source.."+Thread.currentThread().getId()+" ..id "+collect);
 		
-		Iterable<Hotel> iterable = couchbaseRepo.findAllByHotelIdIn(collect);
+		/*Iterable<Hotel> iterable = couchbaseRepo.findAllByHotelIdIn(collect);
 		List<Hotel> dest = new ArrayList<Hotel>();
 	    iterable.forEach(dest::add);
 
 	    List<Hotel> hotels = new ArrayList<Hotel>(source);
 	    hotels.removeAll(dest);
 	    
+	    validator.addAll(hotels);*/
 	    
-	    validator.addAll(hotels);
 	}
 	
 
