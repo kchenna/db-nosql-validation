@@ -22,6 +22,7 @@ import org.springframework.batch.item.json.JacksonJsonObjectReader;
 import org.springframework.batch.item.json.JsonItemReader;
 import org.springframework.batch.item.json.builder.JsonItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
@@ -30,6 +31,7 @@ import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.kc.batch.dao.entity.Geo;
 import com.kc.batch.dao.entity.Hotel;
 import com.kc.batch.dao.entity.Validator;
 import com.kc.batch.dest.dao.repository.IHotelRepository;
@@ -48,6 +50,9 @@ public class BatchConfiguration  {
     
     @Autowired
     public IHotelRepository repo;
+    
+    @Autowired
+    public Validator validator;
 
     @Bean(name = "jdbcTemplate1")
     public JdbcTemplate jdbcTemplate1(DataSource ds) {
@@ -182,9 +187,12 @@ public class BatchConfiguration  {
     public Step step1(DataSource dataSource) {
     	
     	
-    	/*for(int i=500000;i<500500;i++) {
+    	GenericBeanDefinition df = new GenericBeanDefinition();
+    	df.setBeanClass(Geo.class);
+    	
+    	/*for(int i=500500;i<510000;i++) {
     		Hotel hot = new Hotel();
-    		hot.setHotel_id(i);
+    		hot.setHotelId(i);
     		hot.setId(i);
     		hot.setAddress("My Home Address");
     		hot.setFree_breakfast(i%2==0);
@@ -192,12 +200,14 @@ public class BatchConfiguration  {
     		hot.setType("hotel");
     		impl.testCreate(hot);
     		repo.save(hot);
-    	}
+    	}*/
     	
-    	System.out.println("Done ..");*/
+    	System.out.println("Done ..");
     	
     	
     	try {
+    		validator.setStartTime(System.currentTimeMillis());
+    		
 			return stepBuilderFactory.get("step1")
 			        .<Hotel, Hotel> chunk(rows)
 			        .reader(pagingReader(dataSource))

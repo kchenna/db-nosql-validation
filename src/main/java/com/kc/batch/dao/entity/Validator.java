@@ -19,6 +19,23 @@ public class Validator {
 		this.validator.addAll(validator);
 	}
 	
+	private long startTime ;
+	private long endTime;
+	
+	public void setStartTime(long st) {
+		startTime = st;
+	}
+	
+	public long getStartTime() {
+		return startTime;
+	}
 
+	public long getEndTime() {
+		return endTime;
+	}
 
+	public void setEndTime(long st) {
+		endTime = st;
+	}
+	
 }
