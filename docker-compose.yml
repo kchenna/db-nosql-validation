@@ -1,44 +1,48 @@
-# Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
+version: '3.4'
 
-version: '3.7'
-
-# Define services
 services:
-  # App backend service
-  app-server:
-    # Configuration for building the docker image for the backend service
+  db:
     build:
-      context: . # Use an image built from the specified dockerfile in the `polling-app-server` directory.
+      context: ./db
+      network: host
       dockerfile: Dockerfile
     ports:
-      - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine
-    restart: always
-    depends_on: 
-      - database # This service depends on mysql. Start that first.
-    environment: # Pass environment variables to the service
-      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/hotel
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: Kamal!23     
-    networks: # Networks to join (Services on the same network can communicate with each other using their name)
-      - backend
-      - frontend
-    depends_on: 
-      - database
-      - nosqldb
-  database:
-    image: "postgres" # use latest official postgres version
-    env_file:
-      - database.env # configure postgres
+      - '192.168.0.184:5432:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
   nosqldb:
-    image: arungupta/couchbase
+    build:
+      context: ./nosql
     deploy:
       replicas: 1
     ports:
-      - 8091:8091
-      - 8092:8092
-      - 8093:8093
-      - 8094:8094
-      - 11210:11210
-networks:
-  backend:
-  frontend:
+      - '192.168.0.184:8091:8091'
+      - '192.168.0.184:8092:8092'
+      - '192.168.0.184:8093:8093'
+      - '192.168.0.184:8094:8094'
+      - '192.168.0.184:11210:11210'
+    environment:
+      - COUCHBASE_ADMINISTRATOR_USERNAME=Administrator
+      - COUCHBASE_ADMINISTRATOR_PASSWORD=password
+      - COUCHBASE_BUCKET=demobucket
+      - COUCHBASE_RBAC_USERNAME=demobucket
+      - COUCHBASE_RBAC_PASSWORD=password
+      - COUCHBASE_RBAC_NAME=admin
+      - CLUSTER_NAME=demo-cluster
+  app-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      network: host
+    ports:
+      - '192.168.0.184:8080:8080'
+    restart: always
+    depends_on: 
+      - db 
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://192.168.0.184:5432/hotel
+      SPRING_DATASOURCE_USERNAME: hotel
+      SPRING_DATASOURCE_PASSWORD: hotel
+volumes:
+  db-data:

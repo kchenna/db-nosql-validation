@@ -13,7 +13,7 @@ import com.couchbase.client.java.search.queries.NumericRangeQuery;
 import com.couchbase.client.java.search.result.SearchQueryResult;
 import com.couchbase.client.java.search.result.SearchQueryRow;
 
-@Repository
+//@Repository
 public class CouchbaseImpl {
 
 	public void docIdQueryMethod(List<Long> ids) {

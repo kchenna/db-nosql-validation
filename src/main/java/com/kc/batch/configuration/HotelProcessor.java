@@ -12,8 +12,8 @@ import com.kc.batch.dest.dao.repository.IHotelRepository;
 
 public class HotelProcessor implements PageProcessor<Hotel> {
 
-	@Autowired
-	public IHotelRepository couchbaseRepo;
+	//@Autowired
+	//public IHotelRepository couchbaseRepo;
 	
 	@Autowired
 	private Validator validator;

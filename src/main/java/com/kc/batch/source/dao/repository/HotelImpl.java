@@ -13,7 +13,7 @@ import com.kc.batch.dao.entity.Hotel;
 @Repository
 public class HotelImpl {
 	
-	@Autowired
+	/*@Autowired
 	@Qualifier("jdbcTemplate1")
 	private JdbcTemplate jdbcTemplate1;
 	
@@ -61,6 +61,6 @@ public class HotelImpl {
 				hotel.getUrl(),
 				hotel.isVacancy()
 		});
-	}
+	}*/
 
 }

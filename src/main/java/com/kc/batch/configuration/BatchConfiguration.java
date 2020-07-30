@@ -48,19 +48,19 @@ public class BatchConfiguration  {
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
     
-    @Autowired
-    public IHotelRepository repo;
+   // @Autowired
+   // public IHotelRepository repo;
     
     @Autowired
     public Validator validator;
 
-    @Bean(name = "jdbcTemplate1")
-    public JdbcTemplate jdbcTemplate1(DataSource ds) {
-     return new JdbcTemplate(ds);
-    }
+   // @Bean(name = "jdbcTemplate1")
+   // public JdbcTemplate jdbcTemplate1(DataSource ds) {
+    // return new JdbcTemplate(ds);
+   // }
 
-    @Autowired
-    public HotelImpl impl;
+    //@Autowired
+    //public HotelImpl impl;
     
     @Bean 
     public JdbcCursorItemReader<Hotel> read(DataSource dataSource){

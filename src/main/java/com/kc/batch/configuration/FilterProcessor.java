@@ -13,8 +13,8 @@ import com.kc.batch.dest.dao.repository.IHotelRepository;
 
 public class FilterProcessor implements ItemProcessor<Hotel, Hotel> {
 
-	@Autowired
-	public IHotelRepository couchbaseRepo;
+	//@Autowired
+	//public IHotelRepository couchbaseRepo;
 
 	@Override
 	public Hotel process(final Hotel hotel) {
